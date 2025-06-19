@@ -1,0 +1,26 @@
+---
+# - name: nginx-notes-test run docker services
+#   hosts: localhost
+#   become: true
+
+#   vars:
+#     repo_url: git@github.com:karthikeyanrathore/nginx-notes-test.git
+#     repo_dest: "/opt/nginx-notes-test"
+  
+#   roles:
+#     - geerlingguy.docker
+#     - geerlingguy.git
+
+- hosts: all
+  become: true
+
+  vars:
+    repo_url: https://github.com/karthikeyanrathore/nginx-notes-test
+    repo_dest: /opt/nginx-notes-test
+
+  tasks:
+    - name: Setup Docker
+      ansible.builtin.import_tasks: docker.yml
+
+    - name: Deploy Docker Services
+      ansible.builtin.import_tasks: deploy_docker.yml

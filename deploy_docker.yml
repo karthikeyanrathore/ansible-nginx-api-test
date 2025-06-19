@@ -1,0 +1,22 @@
+---
+- name: ensure DNS is working
+  ansible.builtin.command: sudo systemctl restart systemd-resolved.service
+
+- name: cloning nginx-notes-test repository
+  git:
+    repo: "{{repo_url}}"
+    dest: "{{repo_dest}}"
+
+- name: build nginx-notes-test services
+  community.docker.docker_compose_v2:
+    project_src: "{{repo_dest}}"
+    files:
+      - docker-compose-develop.yml
+    build: "always"
+
+- name: restart nginx-notes-test services
+  community.docker.docker_compose_v2:
+    project_src: "{{repo_dest}}"
+    files:
+      - docker-compose-develop.yml
+    state: "restarted"
